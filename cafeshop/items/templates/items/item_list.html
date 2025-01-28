@@ -1,0 +1,25 @@
+{% extends 'cafeshop/layout.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="features">
+    <h1>Товары</h1>
+    {% if items %}
+        {% for el in items %}
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h3>{{el.title}}</h3>
+                    <p>{{el.price}} Руб</p>
+                    <a class="btn btn-primary" href="#" role="button">Оформить заказ</a>
+                    <a class="btn btn-primary" href="#" role="button">Добавить в заказ</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="w-50 mx-auto text-center">
+            <h4>Товаров нет</h4>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

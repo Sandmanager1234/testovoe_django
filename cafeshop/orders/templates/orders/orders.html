@@ -1,0 +1,52 @@
+{% extends 'cafeshop/layout.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Столик</th>
+        <th scope="col">Заказ</th>
+        <th scope="col">Статус</th>
+        <th scope="col">Итоговая цена</th>
+      </tr>
+    </thead>
+    {% if orders %}
+    <tbody>
+        {% for el in orders %}
+        <tr class='clickable-row' data-href='#'>
+            <th scope="row">{{ el.id }}</th>
+            <td>{{ el.table_number }}</td>
+            <td>
+            {% for elem in el.orders.all %}
+              <p>{{ elem.item.title }} | {{ elem.item.price }} Руб. | x{{ elem.count }}</p>
+            {% endfor %}
+            </td>
+            <td>
+              {% if el.status == 'В ожидании' %}
+                <span class="badge text-bg-warning">{{ el.status }}</span>
+              {% elif el.status == 'Готово' %}
+                <span class="badge text-bg-primary">{{ el.status }}</span> 
+              {% elif el.status == 'Оплачено' %}
+                <span class="badge text-bg-success">{{ el.status }}</span>
+              {% endif %}
+            </td>
+            <td>{{ el.total_price }} Руб.</td>
+            <td>
+              <a href="{% url 'orders:order-edit' el.id %}" class="btn btn-primary m-1">edit</a>
+              <a href="{% url 'orders:order-delete' el.id %}" class="btn btn-danger m-1">delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    {% endif %}
+  </table>
+  {% if not orders %}
+    <div class="w-50 mx-auto text-center">
+      <h4>Заказов нет</h4>
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'cafeshop/layout.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<form method="post">{% csrf_token %}
+    <div class="p-3">
+        {{ form.as_p }}
+        <button type="button" class="btn btn-primary" onclick="addFormRow()">Добавить позицию</button>
+    </div>
+    <div id="formset" class="p-3">
+        {{ formset.management_form }}
+        {% for el in formset %}
+            <div class="item-form row mb-3" id="">
+                <div class="col-md-6">
+                    {{ el.item.label_tag }}
+                    {{ el.item }}
+                </div>
+                <div class="col-md-4">
+                    {{ el.count.label_tag }}
+                    {{ el.count }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% if error %}
+    <div class="alert alert-danger p-3" role="alert">
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
+    <input class="btn btn-success m-3" type="submit" value="Создать">
+</form>
+
+<script>
+    const formsetDiv = document.getElementById("formset");
+    
+    let itemForm = document.querySelectorAll(".item-form")
+    let formNum = itemForm.length
+    let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+
+    function addFormRow() {
+        const deleteButton = document.createElement('div');
+        deleteButton.className = 'col-md-2';
+        deleteButton.innerHTML = `
+            <button type="button" class="btn btn-danger" onclick="removeForm(this)">Удалить</button>
+        `;
+
+        let formRegex = RegExp(`form-(\\d){1}-`,'g')
+        let newForm = itemForm[0].cloneNode(true);
+        if (formNum < 10) {
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+            newForm.appendChild(deleteButton)
+            formNum++
+            formsetDiv.appendChild(newForm);
+            totalForms.setAttribute('value', `${formNum}`)
+        } else {
+            alert('Нельзя добавить больше 10 позиций')
+        }
+    }
+
+    function removeForm(e) {
+        e.parentElement.parentElement.remove(); 
+        formNum--; 
+        totalForms.setAttribute('value', `${formNum}`)
+    }
+    </script>
+{% endblock %}

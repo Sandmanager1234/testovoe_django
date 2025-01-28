@@ -1,0 +1,19 @@
+{% extends 'cafeshop/layout.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<form method="post">{% csrf_token %}
+    <div>
+        <h3>Столик: {{ order.table_number }}</h3>
+    </div>
+    <div>
+        <h3>ID: {{ order.id }}</h3>
+    </div>
+    <div>
+        {{ form.as_p }}
+    </div>
+    <input type="submit" value="Изменить">
+</form>
+
+{% endblock %}
