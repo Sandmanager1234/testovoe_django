@@ -10,8 +10,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+import environ
 
 from pathlib import Path
+
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-j$sx#t+5u^#xl48vuyce3ygtp1*^b5)a*ad**6jjb(-37a9--l'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -30,7 +38,6 @@ ALLOWED_HOSTS = [
     'testserver',
     '127.0.0.1',
     'localhost',
-    'udp://109.62.180.156:10358',
     '*'
 ]
 
@@ -86,14 +93,14 @@ WSGI_APPLICATION = 'cafeshop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('POSTGRESQL_USER'),
-        'USER': os.getenv('POSTGRESQL_DB'),
-        'PASSWORD': os.getenv('POSTGRESQL_PASSWORD'),
+        'NAME': env('POSTGRESQL_DB'),
+        'USER': env('POSTGRESQL_USER'),
+        'PASSWORD': env('POSTGRESQL_PASSWORD'),
         'HOST': 'localhost',
         'PORT': ''
     }
 }
-
+os.environ.get('POSTGRESQL_DB')
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
