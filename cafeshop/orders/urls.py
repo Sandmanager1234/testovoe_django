@@ -1,8 +1,15 @@
-from django.urls import path
+from django.urls import path, include
 
 from . import views
+from . import api_views
 
 app_name = 'orders'
+
+api_urls = [
+    path('api/v1/orders', api_views.orders_list_rest_api, name='order-api-list'),
+    path('api/v1/orders/revenue', api_views.get_revenue, name='order-api-revenue'),
+    path('api/v1/orders/<int:pk>', api_views.order_update_delete_api, name='order-api-ud'),
+]
 
 urlpatterns = [
     path('', views.OrderListView.as_view(), name='order-list'),
@@ -15,8 +22,3 @@ urlpatterns = [
     path('api/', include(api_urls))
 ]
 
-api_urls = [
-    path('api/v1/orders', views.orders_list_rest_api, name='order-api-list'),
-    path('api/v1/orders/revenue', views.get_revenue, name='order-api-revenue'),
-    path('api/v1/orders/<int:pk>', views.order_update_delete_api, name='order-api-ud'),
-]
