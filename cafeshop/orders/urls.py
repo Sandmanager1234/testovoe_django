@@ -12,6 +12,10 @@ urlpatterns = [
     path('<int:pk>/delete', views.OrderDeleteView.as_view(), name='order-delete'),
 
     # API
+    path('api/', include(api_urls))
+]
+
+api_urls = [
     path('api/v1/orders', views.orders_list_rest_api, name='order-api-list'),
     path('api/v1/orders/revenue', views.get_revenue, name='order-api-revenue'),
     path('api/v1/orders/<int:pk>', views.order_update_delete_api, name='order-api-ud'),
